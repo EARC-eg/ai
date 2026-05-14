@@ -807,7 +807,7 @@ function signInWithGoogle() {
         google.accounts.id.prompt((notification) => {
             if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
                 const client = google.accounts.oauth2.initCodeClient({
-                    client_id: '21338593045-xxxxxxxxxxxx.apps.googleusercontent.com',
+                    client_id: '1077378702730-1kmvnj5bjksca76puve8qvatoigt7ngf.apps.googleusercontent.com',
                     scope: 'email profile',
                     ux_mode: 'popup',
                     callback: async (response) => {
@@ -838,7 +838,7 @@ async function handleGoogleResponse(response) {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({
                 code: response.code,
-                client_id: '21338593045-xxxxxxxxxxxx.apps.googleusercontent.com',
+                client_id: '1077378702730-1kmvnj5bjksca76puve8qvatoigt7ngf.apps.googleusercontent.com',
                 client_secret: 'YOUR_CLIENT_SECRET',
                 redirect_uri: window.location.origin,
                 grant_type: 'authorization_code'
@@ -1078,8 +1078,8 @@ function showWelcomeMessage() {
             <hr class="welcome-divider">
             <div class="welcome-bio" style="font-size:12px; text-align:right; padding-right:10px;">
                 🔬 <strong>علم المناعة</strong> - أساسيات وتطبيقات<br>
-                🧬 <strong>أبحاث السرطان</strong> - أحدث الاكتشافات<br>
-                💊 <strong>العلاجات المناعية</strong> - آليات وتطورات<br>
+                🧬 <strong>بيولوجيا الاورام</strong> - أحدث الاكتشافات<br>
+                💊 <strong>المناعه والاورام</strong> - آليات وتطورات<br>
                 📚 <strong>الاستشارات الأكاديمية</strong> - للباحثين والطلاب
             </div>
             <button class="whatsapp-professional" onclick="openWhatsApp()">
@@ -1132,7 +1132,7 @@ async function processChat() {
 }
 
 function handleTool(t) {
-    const q = { analyze:'ما هي أساسيات علم المناعة؟', cells:'اشرح أنواع خلايا المناعة.', diseases:'ما هي أمراض المناعة الذاتية؟', therapy:'ما هي العلاجات المناعية للسرطان؟', textbooks:'ما هي أفضل الكتب في المناعة؟', conference:'ما هي أحدث أبحاث السرطان؟' };
+    const q = { analyze:'ما هي أساسيات علم المناعة؟', cells:'اشرح أنواع خلايا المناعة.', diseases:'ما هي أمراض المناعة الذاتية؟', therapy:'ما هي احدث الابحاث في العلاجات المناعية ؟', textbooks:'ما هي أفضل الكتب في المناعة؟', conference:'ما هي أحدث أبحاث السرطان؟' };
     userInput.value = q[t]||''; userInput.focus();
 }
 
