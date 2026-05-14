@@ -371,62 +371,60 @@
             text-align: center;
         }
         
-        /* تصميم احترافي جدا لزر الواتساب */
+              /* تصميم احترافي صغير وأنيق لزر الواتساب */
         .whatsapp-professional {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 8px;
             background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
             color: white;
-            padding: 12px 28px;
-            border-radius: 60px;
+            padding: 8px 20px;
+            border-radius: 40px;
             border: none;
-            font-weight: 700;
-            font-size: 15px;
-            margin: 15px 0 5px;
+            font-weight: 600;
+            font-size: 13px;
+            margin: 12px 0 5px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             font-family: 'Cairo', sans-serif;
-            letter-spacing: 0.3px;
-            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+            box-shadow: 0 2px 8px rgba(37, 211, 102, 0.25);
             position: relative;
             overflow: hidden;
-            width: auto;
-            min-width: 200px;
         }
         
         .whatsapp-professional::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s ease;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
         }
         
         .whatsapp-professional:hover::before {
-            left: 100%;
+            width: 200px;
+            height: 200px;
         }
         
         .whatsapp-professional:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 28px rgba(37, 211, 102, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.35);
             background: linear-gradient(135deg, #20b859 0%, #0e6e62 100%);
         }
         
         .whatsapp-professional:active {
-            transform: translateY(2px);
-            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+            transform: translateY(1px);
         }
         
         .whatsapp-professional svg {
-            width: 22px;
-            height: 22px;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-            transition: transform 0.3s ease;
+            width: 16px;
+            height: 16px;
+            transition: transform 0.2s ease;
         }
         
         .whatsapp-professional:hover svg {
@@ -434,16 +432,13 @@
         }
         
         .whatsapp-professional .btn-text {
-            position: relative;
-            z-index: 1;
+            font-size: 12px;
         }
         
         .whatsapp-professional .btn-icon {
-            position: relative;
-            z-index: 1;
-            animation: pulse 1.5s infinite;
+            display: flex;
+            align-items: center;
         }
-        
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.15); }
