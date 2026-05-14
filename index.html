@@ -554,7 +554,7 @@
         <div class="auth-form hidden" id="registerForm">
             <div class="input-group">
                 <label class="input-label">الاسم</label>
-                <input type="text" class="input-field" id="registerName" placeholder="د. أحمد محمد">
+                <input type="text" class="input-field" id="registerName" placeholder="د. معاذ محمد">
             </div>
             <div class="input-group">
                 <label class="input-label">البريد الإلكتروني</label>
@@ -816,7 +816,7 @@ function signInWithGoogle() {
         });
     } else {
         google.accounts.oauth2.initCodeClient({
-            client_id: '21338593045-xxxxxxxxxxxx.apps.googleusercontent.com',
+            client_id: '1077378702730-1kmvnj5bjksca76puve8qvatoigt7ngf.apps.googleusercontent.com',
             scope: 'email profile',
             ux_mode: 'popup',
             callback: async (response) => {
@@ -834,7 +834,7 @@ async function handleGoogleResponse(response) {
             body: new URLSearchParams({
                 code: response.code,
                 client_id: '1077378702730-1kmvnj5bjksca76puve8qvatoigt7ngf.apps.googleusercontent.com',
-                client_secret: 'YOUR_CLIENT_SECRET',
+                client_secret: 'mozogohary47@gmail.com',
                 redirect_uri: window.location.origin,
                 grant_type: 'authorization_code'
             })
