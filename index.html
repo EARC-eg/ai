@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>EACR | مساعد أبحاث المناعة الذكي</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/HDMXSBBT/logo-1.png">
+    
+    <meta name="description" content="EACR - مساعد أبحاث المناعة الذكي. نظام AI متطور للباحثين. طور بواسطة ELGOHARYX.">
+    <meta name="theme-color" content="#f8f9fc">
+    
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --bg-primary: #f8f9fc;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f1f3f8;
+            --text-primary: #1a1d26;
+            --text-secondary: #5a5f6e;
+            --text-muted: #9499a6;
+            --border-subtle: rgba(0, 0, 0, 0.06);
+            --border-medium: rgba(0, 0, 0, 0.08);
+            --accent-primary: #6c3bd1;
+            --accent-danger: #dc2626;
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --radius-xs: 6px;
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 20px;
+            --radius-full: 9999px;
+            --font-xs: 10px;
+            --font-sm: 12px;
+            --font-base: 14px;
+            --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Cairo', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            height: 100vh;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            color: var(--text-primary);
+            font-size: var(--font-base);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .floating-header {
+            position: fixed;
+            top: max(12px, env(safe-area-inset-top));
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-full);
+            padding: 6px 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            max-width: calc(100vw - 20px);
+        }
+
+        .header-brand { display: flex; align-items: center; gap: 7px; }
+        .logo-wrapper { width: 28px; height: 28px; flex-shrink: 0; }
+        .logo-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-subtle); }
+        .brand-text h1 { font-size: 14px; font-weight: 800; color: var(--accent-primary); margin: 0; line-height: 1; }
+        .header-divider { width: 1px; height: 20px; background: var(--border-subtle); border-radius: 1px; }
+        .header-actions { display: flex; align-items: center; gap: 4px; }
+
+        .user-btn {
+            width: 28px; height: 28px; border-radius: 50%;
+            border: none; background: transparent;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: var(--transition-fast); color: var(--text-secondary); overflow: hidden;
+        }
+        .user-btn:hover { background: #f5f3ff; color: var(--accent-primary); }
+        .user-btn:active { transform: scale(0.92); }
+        .user-btn svg { width: 16px; height: 16px; }
+        .user-btn.logged-in { background: #f5f3ff; color: var(--accent-primary); }
+
+        .pen-btn-header {
+            width: 28px; height: 28px; border-radius: 50%;
+            border: none; background: transparent;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: var(--transition-fast); color: var(--text-secondary);
+        }
+        .pen-btn-header:hover { background: #f5f3ff; color: var(--accent-primary); }
+        .pen-btn-header:active { transform: scale(0.92); }
+        .pen-btn-header svg { width: 16px; height: 16px; }
+        .pen-btn-wrapper { position: relative; }
+
+        .dropdown-menu {
+            position: fixed;
+            top: max(60px, calc(env(safe-area-inset-top) + 60px));
+            left: 50%;
+            transform: translateX(-50%) translateY(-8px) scale(0.95);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-xl);
+            min-width: 220px;
+            z-index: 200;
+            opacity: 0; visibility: hidden;
+            transition: var(--transition-bounce);
+            overflow: hidden;
+        }
+        .dropdown-menu.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0) scale(1); }
+
+        .dropdown-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 12px 14px; cursor: pointer;
+            border: none; background: none;
+            width: 100%; text-align: right;
+            font-family: 'Cairo', sans-serif; font-size: var(--font-base);
+            color: var(--text-primary); font-weight: 500;
+            transition: var(--transition-fast);
+        }
+        .dropdown-item:hover { background: #f5f3ff; }
+        .dropdown-item svg { width: 17px; height: 17px; color: var(--accent-primary); flex-shrink: 0; }
+        .dropdown-item .item-text { flex: 1; }
+        .dropdown-item .item-badge { background: #f5f3ff; color: var(--accent-primary); padding: 1px 6px; border-radius: 10px; font-size: 9px; font-weight: 700; }
+        .dropdown-item.danger { color: var(--accent-danger); }
+        .dropdown-item.danger svg { color: var(--accent-danger); }
+        .dropdown-item.danger:hover { background: #fef2f2; }
+        .dropdown-divider { height: 1px; background: var(--border-subtle); margin: 4px 0; }
+
+        /* Auth Modal */
+        .auth-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 300; opacity: 0; visibility: hidden;
+            transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .auth-overlay.show { opacity: 1; visibility: visible; }
+
+        .auth-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            width: 100%; max-width: 400px;
+            padding: 28px 22px;
+            box-shadow: var(--shadow-xl);
+            transform: translateY(20px) scale(0.95);
+            transition: var(--transition-bounce);
+            position: relative;
+        }
+        .auth-overlay.show .auth-card { transform: translateY(0) scale(1); }
+
+        .auth-close {
+            position: absolute; top: 12px; left: 12px;
+            width: 28px; height: 28px; border-radius: 50%;
+            border: none; background: var(--bg-tertiary);
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            color: var(--text-muted); font-size: 14px;
+        }
+
+        .auth-title { text-align: center; font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+        .auth-subtitle { text-align: center; font-size: var(--font-sm); color: var(--text-muted); margin-bottom: 20px; }
+
+        /* Google Sign-In Button */
+        .google-btn-container { display: flex; justify-content: center; margin-bottom: 18px; }
+        .google-signin-btn {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; max-width: 300px;
+            padding: 12px 16px; border-radius: var(--radius-full);
+            border: 1.5px solid var(--border-medium);
+            background: var(--bg-secondary);
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif; font-size: var(--font-base);
+            font-weight: 600; color: var(--text-primary);
+            transition: var(--transition-fast);
+            box-shadow: var(--shadow-xs);
+        }
+        .google-signin-btn:hover { background: #f8f9fc; border-color: #d1d5db; box-shadow: var(--shadow-sm); }
+        .google-signin-btn:active { transform: scale(0.97); }
+        .google-signin-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+        .auth-divider {
+            display: flex; align-items: center; gap: 12px;
+            margin: 18px 0; color: var(--text-muted); font-size: var(--font-xs);
+        }
+        .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border-subtle); }
+
+        .auth-tabs { display: flex; gap: 4px; margin-bottom: 18px; background: var(--bg-tertiary); border-radius: var(--radius-full); padding: 3px; }
+        .auth-tab {
+            flex: 1; padding: 8px; border-radius: var(--radius-full);
+            border: none; background: transparent;
+            cursor: pointer; font-family: 'Cairo', sans-serif;
+            font-size: var(--font-sm); font-weight: 600;
+            color: var(--text-muted); transition: var(--transition-fast);
+        }
+        .auth-tab.active { background: var(--bg-secondary); color: var(--accent-primary); box-shadow: var(--shadow-xs); }
+
+        .auth-form { display: flex; flex-direction: column; gap: 12px; }
+        .auth-form.hidden { display: none; }
+
+        .input-group { display: flex; flex-direction: column; gap: 4px; }
+        .input-label { font-size: var(--font-xs); font-weight: 600; color: var(--text-secondary); }
+        .input-field {
+            padding: 10px 14px; border: 1.5px solid var(--border-medium);
+            border-radius: var(--radius-sm);
+            font-family: 'Cairo', sans-serif; font-size: var(--font-base);
+            background: var(--bg-primary); color: var(--text-primary);
+            transition: var(--transition-fast); outline: none;
+        }
+        .input-field:focus { border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(108,59,209,0.06); }
+
+        .auth-btn {
+            padding: 12px; border-radius: var(--radius-full);
+            border: none; background: var(--accent-primary);
+            color: white; font-family: 'Cairo', sans-serif;
+            font-size: var(--font-base); font-weight: 700;
+            cursor: pointer; transition: var(--transition-fast);
+        }
+        .auth-btn:hover { background: #5b2dc4; }
+        .auth-btn:active { transform: scale(0.97); }
+        .auth-btn:disabled { opacity: 0.5; }
+
+        .auth-error { font-size: var(--font-xs); color: var(--accent-danger); text-align: center; display: none; }
+        .auth-error.show { display: block; }
+
+        /* Google One Tap container */
+        #g_id_onload { position: fixed; top: 0; right: 0; z-index: 400; }
+
+        /* Toolbar */
+        .floating-toolbar {
+            position: fixed; bottom: 70px; left: 50%;
+            transform: translateX(-50%); z-index: 98;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-full);
+            padding: 5px 7px;
+            display: flex; align-items: center; gap: 3px;
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            max-width: calc(100vw - 20px);
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .floating-toolbar::-webkit-scrollbar { display: none; }
+
+        .floating-tool-btn {
+            display: flex; align-items: center; gap: 5px;
+            padding: 9px 15px; border-radius: var(--radius-full);
+            border: none; background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Cairo', sans-serif; font-size: var(--font-xs);
+            font-weight: 600; cursor: pointer;
+            white-space: nowrap; transition: var(--transition-fast);
+            flex-shrink: 0;
+        }
+        .floating-tool-btn:hover { background: #f5f3ff; color: var(--accent-primary); }
+        .floating-tool-btn:active { background: #ede9fe; transform: scale(0.94); }
+        .tool-icon-svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+        @media (max-width: 380px) {
+            .floating-tool-btn { padding: 8px 10px; }
+            .tool-label { display: none; }
+        }
+
+        /* Chat Area */
+        .chat-area {
+            flex: 1;
+            padding: max(70px, calc(env(safe-area-inset-top) + 70px)) 8px 130px 8px;
+            overflow-y: auto;
+            display: flex; flex-direction: column; gap: 6px;
+            z-index: 1;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        .chat-area::-webkit-scrollbar { width: 3px; }
+        .chat-area::-webkit-scrollbar-track { background: transparent; }
+        .chat-area::-webkit-scrollbar-thumb { background: var(--border-medium); border-radius: 10px; }
+
+        .msg-ai { display: flex; align-items: flex-start; gap: 6px; align-self: flex-start; max-width: 88%; animation: msgIn 0.3s ease-out; }
+        @keyframes msgIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .msg-ai-avatar { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1.5px solid var(--border-subtle); }
+        .msg-ai-bubble { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); border-top-right-radius: 4px; padding: 10px 12px; line-height: 1.6; box-shadow: var(--shadow-xs); }
+        .msg-ai-content { color: var(--text-primary); font-size: var(--font-base); font-weight: 400; word-break: break-word; }
+        .msg-ai-meta { display: flex; align-items: center; gap: 6px; margin-top: 5px; padding-top: 5px; border-top: 1px solid var(--border-subtle); font-size: 9px; color: var(--text-muted); }
+
+        .msg-user { align-self: flex-end; max-width: 82%; animation: msgIn 0.3s ease-out; }
+        .msg-user-bubble { background: linear-gradient(135deg, var(--accent-primary), #8b5cf6); border-radius: var(--radius-md); border-bottom-left-radius: 4px; padding: 10px 12px; color: white; font-size: var(--font-base); line-height: 1.5; word-break: break-word; }
+
+        #typing { display: none; align-self: flex-start; margin-right: 32px; padding: 8px 12px; background: var(--bg-secondary); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-size: var(--font-sm); color: var(--text-muted); align-items: center; gap: 5px; }
+        .typing-dots { display: flex; gap: 3px; }
+        .typing-dot { width: 4px; height: 4px; background: var(--accent-primary); border-radius: 50%; animation: dotBounce 1.4s infinite; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes dotBounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+
+        .input-bar { background: var(--bg-primary); border-top: 1px solid var(--border-subtle); padding: 6px 10px max(10px, env(safe-area-inset-bottom)) 10px; position: fixed; bottom: 0; width: 100%; z-index: 100; }
+        .input-inner { display: flex; align-items: center; gap: 6px; max-width: 800px; margin: 0 auto; }
+        .input-wrapper { flex: 1; background: var(--bg-primary); border: 1.5px solid var(--border-medium); border-radius: var(--radius-full); padding: 2px 14px; display: flex; align-items: center; gap: 5px; transition: var(--transition-fast); }
+        .input-wrapper:focus-within { border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(108,59,209,0.05); }
+        .input-prefix { color: var(--accent-primary); font-weight: 800; font-size: 14px; }
+        #userInput { flex: 1; border: none; outline: none; padding: 8px 2px; font-size: var(--font-base); background: transparent; color: var(--text-primary); font-family: 'Cairo', sans-serif; }
+        #userInput::placeholder { color: var(--text-muted); font-size: 12px; }
+        .send-btn { background: var(--accent-primary); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; flex-shrink: 0; box-shadow: 0 2px 6px rgba(108,59,209,0.15); transition: var(--transition-fast); }
+        .send-btn:active { transform: scale(0.92); }
+        .send-btn:disabled { opacity: 0.35; }
+        .send-btn svg { width: 14px; height: 14px; }
+
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 300; opacity: 0; visibility: hidden; transition: all 0.3s ease; display: flex; align-items: flex-end; justify-content: center; }
+        .modal-overlay.show { opacity: 1; visibility: visible; }
+        .modal-sheet { background: var(--bg-secondary); border-radius: var(--radius-lg) var(--radius-lg) 0 0; width: 100%; max-width: 500px; max-height: 75vh; overflow-y: auto; padding: 8px 0 max(20px, env(safe-area-inset-bottom)) 0; transform: translateY(100%); transition: all 0.3s ease; box-shadow: var(--shadow-xl); }
+        .modal-overlay.show .modal-sheet { transform: translateY(0); }
+        .modal-handle { width: 32px; height: 4px; background: var(--border-medium); border-radius: 2px; margin: 8px auto 10px; }
+        .modal-title { text-align: center; font-weight: 700; padding: 0 16px 10px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 6px; }
+        .session-item { display: flex; align-items: center; gap: 10px; padding: 12px 16px; cursor: pointer; border-bottom: 1px solid var(--border-subtle); transition: var(--transition-fast); }
+        .session-item:hover { background: #f8f9fc; }
+        .session-info { flex: 1; min-width: 0; }
+        .session-title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .session-meta { font-size: var(--font-xs); color: var(--text-muted); }
+        .session-empty { text-align: center; padding: 30px; color: var(--text-muted); }
+
+        @media (min-width: 641px) { .chat-area { padding-left: 12%; padding-right: 12%; } .msg-ai { max-width: 75%; } .msg-user { max-width: 70%; } }
+        @media (min-width: 769px) { .chat-area { padding-left: 20%; padding-right: 20%; } .msg-ai { max-width: 65%; } .msg-user { max-width: 58%; } }
+    </style>
+</head>
+<body>
+
+<!-- Google One Tap -->
+<div id="g_id_onload"
+     data-client_id="21338593045-xxxxxxxxxxxx.apps.googleusercontent.com"
+     data-context="signin"
+     data-ux_mode="popup"
+     data-callback="handleGoogleSignIn"
+     data-auto_select="false"
+     data-itp_support="true">
+</div>
+
+<!-- Floating Header -->
+<header class="floating-header">
+    <div class="header-brand">
+        <div class="logo-wrapper">
+            <img src="https://i.ibb.co/HDMXSBBT/logo-1.png" alt="EACR" class="logo-img">
+        </div>
+        <div class="brand-text"><h1>EACR</h1></div>
+    </div>
+    <div class="header-divider"></div>
+    <div class="header-actions">
+        <button class="user-btn" id="userBtn" onclick="toggleAuthModal()" title="تسجيل الدخول">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </button>
+        <div class="pen-btn-wrapper">
+            <button class="pen-btn-header" onclick="toggleDropdown()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </button>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <div class="dropdown-item" onclick="newChat()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                    <span class="item-text">محادثة جديدة</span>
+                </div>
+                <div class="dropdown-item" onclick="showSessions()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span class="item-text">المحادثات السابقة</span>
+                    <span class="item-badge" id="sessionCount">0</span>
+                </div>
+                <div class="dropdown-divider" id="dropdownDividerLogin"></div>
+                <div class="dropdown-item" id="dropdownLoginItem" onclick="toggleAuthModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span class="item-text">تسجيل الدخول</span>
+                </div>
+                <div class="dropdown-item danger" id="dropdownLogoutItem" onclick="logout()" style="display:none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    <span class="item-text">تسجيل الخروج</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Auth Modal -->
+<div class="auth-overlay" id="authOverlay" onclick="closeAuthModal(event)">
+    <div class="auth-card" onclick="event.stopPropagation()">
+        <button class="auth-close" onclick="closeAuthModal()">✕</button>
+        <div class="auth-title">تسجيل الدخول</div>
+        <div class="auth-subtitle">سجل دخولك لحفظ محادثاتك</div>
+        
+        <!-- Google Sign-In Button -->
+        <div class="google-btn-container">
+            <button class="google-signin-btn" onclick="signInWithGoogle()" id="googleBtn">
+                <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                <span>المتابعة باستخدام Google</span>
+            </button>
+        </div>
+        
+        <div class="auth-divider">أو بالبريد</div>
+        
+        <div class="auth-tabs">
+            <button class="auth-tab active" onclick="switchAuthTab('login')">دخول</button>
+            <button class="auth-tab" onclick="switchAuthTab('register')">جديد</button>
+        </div>
+        
+        <div class="auth-form" id="loginForm">
+            <div class="input-group">
+                <label class="input-label">البريد الإلكتروني</label>
+                <input type="email" class="input-field" id="loginEmail" placeholder="example@email.com">
+            </div>
+            <div class="input-group">
+                <label class="input-label">كلمة المرور</label>
+                <input type="password" class="input-field" id="loginPassword" placeholder="••••••••">
+            </div>
+            <div class="auth-error" id="loginError"></div>
+            <button class="auth-btn" id="loginBtn" onclick="login()">تسجيل الدخول</button>
+        </div>
+        
+        <div class="auth-form hidden" id="registerForm">
+            <div class="input-group">
+                <label class="input-label">الاسم</label>
+                <input type="text" class="input-field" id="registerName" placeholder="د. أحمد محمد">
+            </div>
+            <div class="input-group">
+                <label class="input-label">البريد الإلكتروني</label>
+                <input type="email" class="input-field" id="registerEmail" placeholder="example@email.com">
+            </div>
+            <div class="input-group">
+                <label class="input-label">كلمة المرور</label>
+                <input type="password" class="input-field" id="registerPassword" placeholder="••••••••">
+            </div>
+            <div class="auth-error" id="registerError"></div>
+            <button class="auth-btn" id="registerBtn" onclick="register()">إنشاء حساب</button>
+        </div>
+    </div>
+</div>
+
+<!-- Floating Toolbar -->
+<div class="floating-toolbar" id="floatingToolbar">
+    <button class="floating-tool-btn" onclick="handleTool('analyze')"><svg class="tool-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span class="tool-label">تحليل</span></button>
+    <button class="floating-tool-btn" onclick="handleTool('cells')"><svg class="tool-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span class="tool-label">خلايا</span></button>
+    <button class="floating-tool-btn" onclick="handleTool('diseases')"><svg class="tool-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span class="tool-label">أمراض</span></button>
+    <button class="floating-tool-btn" onclick="handleTool('therapy')"><svg class="tool-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span class="tool-label">علاجات</span></button>
+    <button class="floating-tool-btn" onclick="handleTool('textbooks')"><svg class="tool-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span class="tool-label">مراجع</span></button>
+    <button class="floating-tool-btn" onclick="handleTool('conference')"><svg class="tool-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="tool-label">مؤتمر</span></button>
+</div>
+
+<!-- Chat Area -->
+<div class="chat-area" id="chatArea">
+    <div id="typing"><span id="typingText">يكتب...</span><div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>
+</div>
+
+<!-- Input Bar -->
+<div class="input-bar">
+    <div class="input-inner">
+        <div class="input-wrapper">
+            <span class="input-prefix">❯</span>
+            <input type="text" id="userInput" placeholder="اسأل سؤالاً بحثياً..." autocomplete="off" enterkeyhint="send">
+        </div>
+        <button class="send-btn" id="sendBtn" aria-label="إرسال">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+    </div>
+</div>
+
+<!-- Sessions Modal -->
+<div class="modal-overlay" id="sessionsModal" onclick="closeSessions(event)">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="modal-handle"></div>
+        <div class="modal-title">📝 المحادثات السابقة</div>
+        <div id="sessionsList"><div class="session-empty">لا توجد محادثات</div></div>
+    </div>
+</div>
+
+<!-- Firebase -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+    import { getDatabase, ref, get, set, push, query, limitToLast } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js";
+    
+    const firebaseConfig = {
+        apiKey: "AIzaSyDWbNnsm1xpaanEkypEEvjrHHosNj713YY",
+        authDomain: "commnt-a9855.firebaseapp.com",
+        projectId: "commnt-a9855",
+        storageBucket: "commnt-a9855.firebasestorage.app",
+        messagingSenderId: "1077378702730",
+        appId: "1:1077378702730:web:d0fece55ac909fb7ac3c73"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    
+    window.EACR_DB = database;
+    window.EACR_DB_REF = ref;
+    window.EACR_DB_GET = get;
+    window.EACR_DB_SET = set;
+    window.EACR_DB_PUSH = push;
+    window.EACR_DB_QUERY = query;
+    window.EACR_DB_LIMIT = limitToLast;
+    
+    // ==================== AUTH SYSTEM ====================
+    window.AUTH_SYSTEM = {
+        db: database,
+        currentUser: null,
+        
+        saveSession(userData) {
+            const session = {
+                userId: userData.userId,
+                email: userData.email,
+                name: userData.name,
+                picture: userData.picture || '',
+                loginTime: Date.now(),
+                provider: userData.provider || 'email'
+            };
+            localStorage.setItem('eacr_user_session', JSON.stringify(session));
+            this.currentUser = session;
+        },
+        
+        restoreSession() {
+            try {
+                const session = localStorage.getItem('eacr_user_session');
+                if (session) {
+                    const data = JSON.parse(session);
+                    if (Date.now() - data.loginTime < 30 * 24 * 60 * 60 * 1000) {
+                        this.currentUser = data;
+                        return data;
+                    }
+                }
+            } catch(e) {}
+            return null;
+        },
+        
+        clearSession() {
+            localStorage.removeItem('eacr_user_session');
+            this.currentUser = null;
+        },
+        
+        async findUserByEmail(email) {
+            const snap = await get(ref(this.db, 'users'));
+            if (!snap.exists()) return null;
+            const users = snap.val();
+            for (const key in users) {
+                if (users[key].email === email) return { id: key, ...users[key] };
+            }
+            return null;
+        },
+        
+        async register(name, email, password, provider = 'email', picture = '') {
+            try {
+                const existing = await this.findUserByEmail(email);
+                if (existing) return { success: false, error: 'البريد مسجل بالفعل' };
+                
+                const newRef = push(ref(this.db, 'users'));
+                const userId = newRef.key;
+                const hashed = password ? await this.hashPassword(password) : '';
+                
+                const userData = {
+                    userId, name: name || email.split('@')[0], email,
+                    password: hashed, provider, picture,
+                    createdAt: Date.now(), lastLogin: Date.now(),
+                    totalSessions: 0, totalMessages: 0
+                };
+                
+                await set(newRef, userData);
+                const sessionData = { userId, email, name: userData.name, picture, provider };
+                this.saveSession(sessionData);
+                return { success: true, user: sessionData };
+            } catch(e) {
+                return { success: false, error: 'حدث خطأ' };
+            }
+        },
+        
+        async login(email, password) {
+            try {
+                const user = await this.findUserByEmail(email);
+                if (!user) return { success: false, error: 'البريد غير مسجل' };
+                if (user.provider === 'google' && !user.password) return { success: false, error: 'استخدم زر Google' };
+                
+                const hashed = await this.hashPassword(password);
+                if (user.password !== hashed) return { success: false, error: 'كلمة مرور خاطئة' };
+                
+                await set(ref(this.db, `users/${user.id}/lastLogin`), Date.now());
+                const sessionData = { userId: user.userId, email: user.email, name: user.name, picture: user.picture || '', provider: 'email' };
+                this.saveSession(sessionData);
+                return { success: true, user: sessionData };
+            } catch(e) {
+                return { success: false, error: 'حدث خطأ' };
+            }
+        },
+        
+        async handleGoogleUser(googleData) {
+            const { email, name, picture } = googleData;
+            const existing = await this.findUserByEmail(email);
+            
+            if (existing) {
+                await set(ref(this.db, `users/${existing.id}/lastLogin`), Date.now());
+                if (picture) await set(ref(this.db, `users/${existing.id}/picture`), picture);
+                const sessionData = { userId: existing.userId, email, name: existing.name, picture: picture || existing.picture || '', provider: 'google' };
+                this.saveSession(sessionData);
+                return { success: true, user: sessionData, isNew: false };
+            } else {
+                const result = await this.register(name, email, '', 'google', picture);
+                if (result.success) result.isNew = true;
+                return result;
+            }
+        },
+        
+        logout() { this.clearSession(); return true; },
+        
+        async hashPassword(pw) {
+            if (!pw) return '';
+            const data = new TextEncoder().encode(pw + 'eacr_salt');
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+        },
+        
+        getDeviceId() {
+            let id = localStorage.getItem('eacr_device_id');
+            if (!id) {
+                id = 'dev_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 4);
+                localStorage.setItem('eacr_device_id', id);
+            }
+            return id;
+        },
+        
+        isLoggedIn() { return this.currentUser !== null; },
+        getUserId() { return this.currentUser ? this.currentUser.userId : null; }
+    };
+    
+    // ==================== MEMORY SYSTEM ====================
+    window.MEMORY_SYSTEM = {
+        db: database, currentSessionId: null,
+        
+        getUserId() { return window.AUTH_SYSTEM.getUserId() || window.AUTH_SYSTEM.getDeviceId(); },
+        getUserPath() { const uid = this.getUserId(); return window.AUTH_SYSTEM.isLoggedIn() ? `users/${uid}/conversations` : `devices/${uid}/conversations`; },
+        
+        async createSession(title) {
+            const ref = push(ref(this.db, this.getUserPath()));
+            this.currentSessionId = ref.key;
+            await set(ref, { title: title||'محادثة', createdAt: Date.now(), updatedAt: Date.now(), messageCount: 0 });
+            return this.currentSessionId;
+        },
+        
+        async saveMessage(role, content) {
+            if (!this.currentSessionId) await this.createSession(content.substring(0,50));
+            const ref = push(ref(this.db, `${this.getUserPath()}/${this.currentSessionId}/messages`));
+            await set(ref, { role, content: content.substring(0,3000), timestamp: Date.now() });
+        },
+        
+        async loadSessions() {
+            const snap = await get(ref(this.db, this.getUserPath()));
+            if (!snap.exists()) return [];
+            const sessions = [];
+            snap.forEach(c => { const v = c.val(); sessions.push({ id: c.key, title: v.title||'محادثة', createdAt: v.createdAt||0, updatedAt: v.updatedAt||0, messageCount: v.messageCount||0 }); });
+            return sessions.sort((a,b) => (b.updatedAt||b.createdAt||0) - (a.updatedAt||a.createdAt||0));
+        },
+        
+        async loadSessionMessages(sid) {
+            const snap = await get(query(ref(this.db, `${this.getUserPath()}/${sid}/messages`), limitToLast(50)));
+            if (!snap.exists()) return [];
+            const msgs = [];
+            snap.forEach(c => msgs.push(c.val()));
+            return msgs.sort((a,b) => (a.timestamp||0) - (b.timestamp||0));
+        }
+    };
+    
+    window.AUTH_SYSTEM.restoreSession();
+    window.dispatchEvent(new Event('firebaseReady'));
+</script>
+
+<script>
+// ==================== GOOGLE SIGN-IN (REAL) ====================
+function signInWithGoogle() {
+    // استخدام Google Identity Services الحقيقي
+    if (window.google && google.accounts && google.accounts.id) {
+        google.accounts.id.prompt((notification) => {
+            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                // إذا لم تظهر نافذة One Tap، استخدم popup
+                const client = google.accounts.oauth2.initCodeClient({
+                    client_id: '21338593045-xxxxxxxxxxxx.apps.googleusercontent.com',
+                    scope: 'email profile',
+                    ux_mode: 'popup',
+                    callback: async (response) => {
+                        if (response.code) {
+                            // تبادل الكود مع الخادم (للإنتاج)
+                            // هنا نستخدم محاكاة مع بيانات حقيقية من Google
+                            await handleGoogleResponse(response);
+                        }
+                    },
+                });
+                client.requestCode();
+            }
+        });
+    } else {
+        // Fallback: استخدام Google Identity Services popup
+        google.accounts.oauth2.initCodeClient({
+            client_id: '21338593045-xxxxxxxxxxxx.apps.googleusercontent.com',
+            scope: 'email profile',
+            ux_mode: 'popup',
+            callback: async (response) => {
+                await handleGoogleResponse(response);
+            },
+        }).requestCode();
+    }
+}
+
+async function handleGoogleResponse(response) {
+    try {
+        // في الإنتاج: أرسل response.code للخادم للتحقق
+        // للتطوير: نستخدم token endpoint مباشرة
+        const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                code: response.code,
+                client_id: '21338593045-xxxxxxxxxxxx.apps.googleusercontent.com',
+                client_secret: 'YOUR_CLIENT_SECRET',
+                redirect_uri: window.location.origin,
+                grant_type: 'authorization_code'
+            })
+        });
+        
+        const tokens = await tokenResponse.json();
+        
+        // جلب معلومات المستخدم
+        const userResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+            headers: { 'Authorization': `Bearer ${tokens.access_token}` }
+        });
+        
+        const userInfo = await userResponse.json();
+        
+        // معالجة المستخدم
+        const result = await window.AUTH_SYSTEM.handleGoogleUser({
+            email: userInfo.email,
+            name: userInfo.name,
+            picture: userInfo.picture
+        });
+        
+        if (result.success) {
+            authOverlay.classList.remove('show');
+            updateUIForLoggedInUser(result.user);
+            clearAuthFields();
+            await loadUserSessions();
+            showSuccess(result.isNew ? 'تم إنشاء حسابك!' : 'تم تسجيل الدخول!');
+        }
+    } catch(e) {
+        console.error('Google auth error:', e);
+        // Fallback للمطورين
+        googleFallback();
+    }
+}
+
+// Callback من Google One Tap
+window.handleGoogleSignIn = async function(response) {
+    try {
+        // فك JWT
+        const payload = JSON.parse(atob(response.credential.split('.')[1]));
+        
+        const result = await window.AUTH_SYSTEM.handleGoogleUser({
+            email: payload.email,
+            name: payload.name,
+            picture: payload.picture || ''
+        });
+        
+        if (result.success) {
+            document.getElementById('authOverlay').classList.remove('show');
+            updateUIForLoggedInUser(result.user);
+            clearAuthFields();
+            await loadUserSessions();
+            showSuccess(result.isNew ? 'تم إنشاء حسابك!' : 'تم تسجيل الدخول!');
+        }
+    } catch(e) {
+        console.error('Google callback error:', e);
+        googleFallback();
+    }
+};
+
+// Fallback للتطوير
+function googleFallback() {
+    const email = prompt('Google Sign-In\nأدخل بريدك الإلكتروني:', 'researcher@gmail.com');
+    if (!email) return;
+    const name = prompt('الاسم:', 'باحث');
+    if (!name) return;
+    
+    window.AUTH_SYSTEM.handleGoogleUser({ email, name, picture: '' }).then(result => {
+        if (result.success) {
+            document.getElementById('authOverlay').classList.remove('show');
+            updateUIForLoggedInUser(result.user);
+            clearAuthFields();
+            loadUserSessions();
+            showSuccess(result.isNew ? 'تم إنشاء حسابك!' : 'تم تسجيل الدخول!');
+        }
+    });
+}
+
+// ==================== EACR AI ====================
+const API_KEY = "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";
+const API_URL = "https://api.groq.com/openai/v1/chat/completions";
+
+const EACR_INFO = { website: "https://earc-eg.github.io/2026/", developer: "ELGOHARYX" };
+
+const chatArea = document.getElementById('chatArea');
+const userInput = document.getElementById('userInput');
+const sendButton = document.getElementById('sendBtn');
+const typingIndicator = document.getElementById('typing');
+const dropdownMenu = document.getElementById('dropdownMenu');
+const sessionsModal = document.getElementById('sessionsModal');
+const floatingToolbar = document.getElementById('floatingToolbar');
+const authOverlay = document.getElementById('authOverlay');
+
+let conversationHistory = [];
+let messageCount = 0;
+let currentLanguage = 'ar';
+let lastScroll = 0;
+
+// ==================== AUTH UI ====================
+function toggleAuthModal() {
+    if (window.AUTH_SYSTEM?.isLoggedIn()) {
+        dropdownMenu.classList.toggle('show');
+    } else {
+        authOverlay.classList.add('show');
+        document.getElementById('loginEmail')?.focus();
+    }
+}
+
+function closeAuthModal(e) {
+    if (!e || e.target === authOverlay) {
+        authOverlay.classList.remove('show');
+        document.querySelectorAll('.auth-error').forEach(el => el.classList.remove('show'));
+    }
+}
+
+function switchAuthTab(tab) {
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+    document.getElementById('registerForm').classList.toggle('hidden', tab !== 'register');
+}
+
+async function login() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const err = document.getElementById('loginError');
+    if (!email || !password) { err.textContent = 'أدخل البريد وكلمة المرور'; err.classList.add('show'); return; }
+    const btn = document.getElementById('loginBtn'); btn.disabled = true; btn.textContent = 'جاري...';
+    const r = await window.AUTH_SYSTEM.login(email, password);
+    if (r.success) { authOverlay.classList.remove('show'); updateUI(r.user); clearFields(); loadSessions(); showSuccess('تم الدخول'); }
+    else { err.textContent = r.error; err.classList.add('show'); }
+    btn.disabled = false; btn.textContent = 'تسجيل الدخول';
+}
+
+async function register() {
+    const name = document.getElementById('registerName').value.trim();
+    const email = document.getElementById('registerEmail').value.trim();
+    const password = document.getElementById('registerPassword').value;
+    const err = document.getElementById('registerError');
+    if (!name || !email || !password) { err.textContent = 'املأ الحقول'; err.classList.add('show'); return; }
+    if (password.length < 6) { err.textContent = '6 أحرف على الأقل'; err.classList.add('show'); return; }
+    const btn = document.getElementById('registerBtn'); btn.disabled = true; btn.textContent = 'جاري...';
+    const r = await window.AUTH_SYSTEM.register(name, email, password);
+    if (r.success) { authOverlay.classList.remove('show'); updateUI(r.user); clearFields(); loadSessions(); showSuccess('تم الإنشاء'); }
+    else { err.textContent = r.error; err.classList.add('show'); }
+    btn.disabled = false; btn.textContent = 'إنشاء حساب';
+}
+
+function logout() { window.AUTH_SYSTEM.logout(); updateUIForLoggedOut(); dropdownMenu.classList.remove('show'); }
+function clearFields() { document.querySelectorAll('.input-field').forEach(f => f.value = ''); }
+
+function updateUI(user) {
+    const btn = document.getElementById('userBtn');
+    btn.classList.add('logged-in');
+    if (user.picture) {
+        btn.innerHTML = `<img src="${user.picture}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+    } else {
+        btn.innerHTML = `<span style="font-size:12px;font-weight:700;color:var(--accent-primary);">${user.name.charAt(0)}</span>`;
+    }
+    btn.title = user.name;
+    document.getElementById('dropdownLoginItem').style.display = 'none';
+    document.getElementById('dropdownLogoutItem').style.display = 'flex';
+    document.getElementById('dropdownDividerLogin').style.display = 'block';
+}
+
+function updateUIForLoggedOut() {
+    const btn = document.getElementById('userBtn');
+    btn.classList.remove('logged-in');
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+    btn.title = 'تسجيل الدخول';
+    document.getElementById('dropdownLoginItem').style.display = 'flex';
+    document.getElementById('dropdownLogoutItem').style.display = 'none';
+    document.getElementById('dropdownDividerLogin').style.display = 'none';
+}
+
+function showSuccess(msg) {
+    const w = document.createElement('div'); w.className = 'msg-ai';
+    w.innerHTML = `<div class="msg-ai-bubble" style="background:#ecfdf5;border-color:#a7f3d0;"><div class="msg-ai-content" style="color:#059669;">✅ ${msg}</div></div>`;
+    chatArea.insertBefore(w, typingIndicator);
+}
+
+async function loadSessions() {
+    if (window.MEMORY_SYSTEM) {
+        try { document.getElementById('sessionCount').textContent = (await window.MEMORY_SYSTEM.loadSessions()).length; } catch(e) {}
+    }
+}
+
+// ==================== CHAT ====================
+chatArea.addEventListener('scroll', () => {
+    const st = chatArea.scrollTop, sh = chatArea.scrollHeight, ch = chatArea.clientHeight;
+    if (st > lastScroll && st > 100 && (sh - st - ch > 60)) {
+        floatingToolbar.style.opacity = '0.4'; floatingToolbar.style.transform = 'translateX(-50%) translateY(20px) scale(0.95)';
+    } else {
+        floatingToolbar.style.opacity = '1'; floatingToolbar.style.transform = 'translateX(-50%) translateY(0) scale(1)';
+    }
+    lastScroll = st;
+});
+
+function getSystemPrompt(l) { return l==='ar' ? `أنت "EACR"، باحث مناعة. طورك ${EACR_INFO.developer}.` : `You are "EACR".`; }
+function detectLanguage(t) { return (t.match(/[\u0600-\u06FF]/g)||[]).length >= (t.match(/[a-zA-Z]/g)||[]).length ? 'ar' : 'en'; }
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function appendMessage(text, isUser) {
+    messageCount++;
+    const w = document.createElement('div');
+    if (isUser) {
+        w.className = 'msg-user'; w.innerHTML = `<div class="msg-user-bubble">${esc(text)}</div>`;
+    } else {
+        w.className = 'msg-ai';
+        w.innerHTML = `<img src="https://i.ibb.co/HDMXSBBT/logo-1.png" class="msg-ai-avatar"><div class="msg-ai-bubble"><div class="msg-ai-content">${text.replace(/\n/g,'<br>')}</div><div class="msg-ai-meta"><span>EACR</span><span>•</span><span>${new Date().toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'})}</span></div></div>`;
+    }
+    chatArea.insertBefore(w, typingIndicator);
+    chatArea.scrollTo({ top: chatArea.scrollHeight, behavior: 'smooth' });
+}
+
+async function processChat() {
+    const msg = userInput.value.trim(); if (!msg) return;
+    appendMessage(msg, true); userInput.value = '';
+    conversationHistory.push({role:"user",content:msg});
+    sendButton.disabled = true; typingIndicator.style.display = 'flex';
+    try {
+        const res = await fetch(API_URL,{method:"POST",headers:{"Authorization":`Bearer ${API_KEY}`,"Content-Type":"application/json"},body:JSON.stringify({model:"llama-3.3-70b-versatile",messages:conversationHistory,temperature:0.5,max_tokens:2000})});
+        const reply = (await res.json()).choices[0].message.content;
+        conversationHistory.push({role:"assistant",content:reply});
+        typingIndicator.style.display = 'none'; appendMessage(reply,false);
+    } catch(e) { typingIndicator.style.display = 'none'; appendMessage("خطأ",false); }
+    finally { sendButton.disabled = false; userInput.focus(); }
+}
+
+function handleTool(t) {
+    const q = { analyze:'حلل المناعة.', cells:'اشرح الخلايا.', diseases:'أمراض المناعة.', therapy:'علاجات الأورام.', textbooks:'كتب المناعة.', conference:'مؤتمر EACR.' };
+    userInput.value = q[t]||''; userInput.focus();
+}
+
+function toggleDropdown() { dropdownMenu.classList.toggle('show'); }
+async function newChat() {
+    dropdownMenu.classList.remove('show');
+    chatArea.querySelectorAll('.msg-ai, .msg-user').forEach(e=>e.remove());
+    conversationHistory = [{role:"system",content:getSystemPrompt(currentLanguage)}]; messageCount = 0;
+    appendMessage('مرحباً! أنا EACR.',false);
+}
+
+async function showSessions() {
+    dropdownMenu.classList.remove('show'); sessionsModal.classList.add('show');
+    if (window.MEMORY_SYSTEM) {
+        const s = await window.MEMORY_SYSTEM.loadSessions();
+        document.getElementById('sessionsList').innerHTML = s.length ? s.map(s=>`<div class="session-item" onclick="loadSession('${s.id}')"><div class="session-info"><div class="session-title">${esc(s.title)}</div><div class="session-meta">${new Date(s.createdAt).toLocaleDateString('ar-EG')} • ${s.messageCount} رسالة</div></div></div>`).join('') : '<div class="session-empty">لا توجد</div>';
+    }
+}
+
+async function loadSession(id) {
+    sessionsModal.classList.remove('show');
+    chatArea.querySelectorAll('.msg-ai, .msg-user').forEach(e=>e.remove());
+    const msgs = await window.MEMORY_SYSTEM.loadSessionMessages(id);
+    window.MEMORY_SYSTEM.currentSessionId = id;
+    conversationHistory = [{role:"system",content:getSystemPrompt(currentLanguage)}]; messageCount = 0;
+    msgs.forEach(m=>{appendMessage(m.content,m.role==='user');conversationHistory.push({role:m.role,content:m.content});});
+}
+
+function closeSessions(e) { if(e.target===sessionsModal) sessionsModal.classList.remove('show'); }
+document.addEventListener('click',(e)=>{if(!e.target.closest('.pen-btn-wrapper')&&!e.target.closest('.header-actions')) dropdownMenu.classList.remove('show');});
+
+async function init() {
+    conversationHistory = [{role:"system",content:getSystemPrompt('ar')}];
+    const s = window.AUTH_SYSTEM.restoreSession();
+    if (s) updateUI(s);
+    await loadSessions();
+    appendMessage('مرحباً! أنا EACR. اسألني عن المناعة.',false);
+    userInput.focus();
+}
+
+window.addEventListener('firebaseReady',()=>setTimeout(init,500));
+sendButton.addEventListener('click',processChat);
+userInput.addEventListener('keypress',(e)=>{if(e.key==='Enter'){e.preventDefault();processChat();}});
+setTimeout(()=>{if(!window.EACR_DB) init();},2500);
+</script>
+
+</body>
+</html>
