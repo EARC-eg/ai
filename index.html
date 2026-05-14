@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>EACR | AI</title>
-    <link rel="icon" type="image/png" href="https://i.ibb.co/HDMXSBBT/logo-1.png">
+    <title>أ.د محمد لبيب سالم | أستاذ المناعة - جامعة طنطا</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/nqjSTBjJ/Whats-App-Image-2026-05-14-at-10-58-27-PM.jpg">
     
-    <meta name="description" content="EACR - مساعد أبحاث المناعة الذكي. نظام AI متطور للباحثين. طور بواسطة ELGOHARYX.">
+    <meta name="description" content="أ.د محمد لبيب سالم - أستاذ علم المناعة بجامعة طنطا ورئيس الجمعية المصرية لأبحاث السرطان">
     <meta name="theme-color" content="#f8f9fc">
     
     <!-- Google Identity Services -->
@@ -26,6 +26,9 @@
             --border-medium: rgba(0, 0, 0, 0.08);
             --accent-primary: #6c3bd1;
             --accent-danger: #dc2626;
+            --whatsapp-color: #25D366;
+            --whatsapp-dark: #075e54;
+            --whatsapp-light: #dcf8c5;
             --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
             --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
@@ -278,7 +281,9 @@
             flex: 1;
             padding: max(70px, calc(env(safe-area-inset-top) + 70px)) 8px 130px 8px;
             overflow-y: auto;
-            display: flex; flex-direction: column; gap: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
             z-index: 1;
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
@@ -329,6 +334,138 @@
         .session-meta { font-size: var(--font-xs); color: var(--text-muted); }
         .session-empty { text-align: center; padding: 30px; color: var(--text-muted); }
 
+        /* Welcome message styles - الصورة مستطيلة وليست دائرية */
+        .welcome-card {
+            text-align: center;
+            padding: 10px 5px;
+        }
+        .welcome-image {
+            width: 100%;
+            max-width: 280px;
+            height: auto;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid var(--border-medium);
+            margin-bottom: 12px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .welcome-name {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--accent-primary);
+            margin: 8px 0 4px;
+        }
+        .welcome-title {
+            font-size: 13px;
+            color: #666;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .welcome-bio {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        /* تصميم احترافي جدا لزر الواتساب */
+        .whatsapp-professional {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 60px;
+            border: none;
+            font-weight: 700;
+            font-size: 15px;
+            margin: 15px 0 5px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Cairo', sans-serif;
+            letter-spacing: 0.3px;
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+            position: relative;
+            overflow: hidden;
+            width: auto;
+            min-width: 200px;
+        }
+        
+        .whatsapp-professional::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .whatsapp-professional:hover::before {
+            left: 100%;
+        }
+        
+        .whatsapp-professional:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(37, 211, 102, 0.4);
+            background: linear-gradient(135deg, #20b859 0%, #0e6e62 100%);
+        }
+        
+        .whatsapp-professional:active {
+            transform: translateY(2px);
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        }
+        
+        .whatsapp-professional svg {
+            width: 22px;
+            height: 22px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            transition: transform 0.3s ease;
+        }
+        
+        .whatsapp-professional:hover svg {
+            transform: scale(1.1);
+        }
+        
+        .whatsapp-professional .btn-text {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .whatsapp-professional .btn-icon {
+            position: relative;
+            z-index: 1;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+        
+        .welcome-divider {
+            margin: 12px 0;
+            border-color: var(--border-subtle);
+        }
+        
+        .honor-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin: 5px;
+        }
+
         @media (min-width: 641px) { .chat-area { padding-left: 12%; padding-right: 12%; } .msg-ai { max-width: 75%; } .msg-user { max-width: 70%; } }
         @media (min-width: 769px) { .chat-area { padding-left: 20%; padding-right: 20%; } .msg-ai { max-width: 65%; } .msg-user { max-width: 58%; } }
     </style>
@@ -348,9 +485,9 @@
 <header class="floating-header">
     <div class="header-brand">
         <div class="logo-wrapper">
-            <img src="https://i.ibb.co/HDMXSBBT/logo-1.png" alt="EACR" class="logo-img">
+            <img src="https://i.ibb.co/nqjSTBjJ/Whats-App-Image-2026-05-14-at-10-58-27-PM.jpg" alt="أ.د محمد لبيب سالم" class="logo-img">
         </div>
-        <div class="brand-text"><h1>EACR</h1></div>
+        <div class="brand-text"><h1>أ.د محمد لبيب سالم</h1></div>
     </div>
     <div class="header-divider"></div>
     <div class="header-actions">
@@ -392,7 +529,6 @@
         <div class="auth-title">تسجيل الدخول</div>
         <div class="auth-subtitle">سجل دخولك لحفظ محادثاتك</div>
         
-        <!-- Google Sign-In Button -->
         <div class="google-btn-container">
             <button class="google-signin-btn" onclick="signInWithGoogle()" id="googleBtn">
                 <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
@@ -449,7 +585,6 @@
     <button class="floating-tool-btn" onclick="handleTool('conference')"><svg class="tool-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="tool-label">مؤتمر</span></button>
 </div>
 
-<!-- Chat Area -->
 <div class="chat-area" id="chatArea">
     <div id="typing"><span id="typingText">يكتب...</span><div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>
 </div>
@@ -458,7 +593,7 @@
     <div class="input-inner">
         <div class="input-wrapper">
             <span class="input-prefix">❯</span>
-            <input type="text" id="userInput" placeholder="اسأل سؤالاً بحثياً..." autocomplete="off" enterkeyhint="send">
+            <input type="text" id="userInput" placeholder="اسأل أ.د محمد لبيب سالم عن المناعة وأبحاث السرطان..." autocomplete="off" enterkeyhint="send">
         </div>
         <button class="send-btn" id="sendBtn" aria-label="إرسال">
             <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
@@ -671,15 +806,12 @@ function signInWithGoogle() {
     if (window.google && google.accounts && google.accounts.id) {
         google.accounts.id.prompt((notification) => {
             if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-                // إذا لم تظهر نافذة One Tap، استخدم popup
                 const client = google.accounts.oauth2.initCodeClient({
                     client_id: '21338593045-xxxxxxxxxxxx.apps.googleusercontent.com',
                     scope: 'email profile',
                     ux_mode: 'popup',
                     callback: async (response) => {
                         if (response.code) {
-                            // تبادل الكود مع الخادم (للإنتاج)
-                            // هنا نستخدم محاكاة مع بيانات حقيقية من Google
                             await handleGoogleResponse(response);
                         }
                     },
@@ -782,7 +914,11 @@ function googleFallback() {
 
 const API_KEY = "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";
 const API_URL = "https://api.groq.com/openai/v1/chat/completions";
-
+const PROFESSOR_NAME = "أ.د محمد لبيب سالم";
+const PROFESSOR_TITLE = "أستاذ علم المناعة - جامعة طنطا";
+const PROFESSOR_HONOR = "رئيس الجمعية المصرية لأبحاث السرطان";
+const PROFESSOR_AVATAR = "https://i.ibb.co/nqjSTBjJ/Whats-App-Image-2026-05-14-at-10-58-27-PM.jpg";
+const WHATSAPP_NUMBER = "201101962166";
 const EACR_INFO = { website: "https://earc-eg.github.io/2026/", developer: "ELGOHARYX" };
 
 const chatArea = document.getElementById('chatArea');
@@ -798,6 +934,12 @@ let conversationHistory = [];
 let messageCount = 0;
 let currentLanguage = 'ar';
 let lastScroll = 0;
+
+// دالة للتحقق من صحة النص (يسمح فقط بالعربية والإنجليزية)
+function isValidLanguage(text) {
+    const allowedPattern = /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FFa-zA-Z0-9\s\.,!?;:()\-_'"@#\$%&*+=/\\|~`{}[\]<>،؛؟\u061F\u061B\u066B\u066C\u060C\s]+$/;
+    return allowedPattern.test(text);
+}
 
 function toggleAuthModal() {
     if (window.AUTH_SYSTEM?.isLoggedIn()) {
@@ -897,7 +1039,9 @@ chatArea.addEventListener('scroll', () => {
     lastScroll = st;
 });
 
-function getSystemPrompt(l) { return l==='ar' ? `أنت "EACR"، باحث مناعة. طورك ${EACR_INFO.developer}.` : `You are "EACR".`; }
+function getSystemPrompt(l) { 
+    return l==='ar' ? `أنت "${PROFESSOR_NAME}"، ${PROFESSOR_TITLE} و${PROFESSOR_HONOR}. أنت خبير في علم المناعة وأبحاث السرطان.` : `You are "${PROFESSOR_NAME}", Professor of Immunology at Tanta University and President of the Egyptian Association for Cancer Research.`; 
+}
 function detectLanguage(t) { return (t.match(/[\u0600-\u06FF]/g)||[]).length >= (t.match(/[a-zA-Z]/g)||[]).length ? 'ar' : 'en'; }
 function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
@@ -908,37 +1052,97 @@ function appendMessage(text, isUser) {
         w.className = 'msg-user'; w.innerHTML = `<div class="msg-user-bubble">${esc(text)}</div>`;
     } else {
         w.className = 'msg-ai';
-        w.innerHTML = `<img src="https://i.ibb.co/HDMXSBBT/logo-1.png" class="msg-ai-avatar"><div class="msg-ai-bubble"><div class="msg-ai-content">${text.replace(/\n/g,'<br>')}</div><div class="msg-ai-meta"><span>EACR</span><span>•</span><span>${new Date().toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'})}</span></div></div>`;
+        w.innerHTML = `<img src="${PROFESSOR_AVATAR}" class="msg-ai-avatar"><div class="msg-ai-bubble"><div class="msg-ai-content">${text.replace(/\n/g,'<br>')}</div><div class="msg-ai-meta"><span>${PROFESSOR_NAME}</span><span>•</span><span>${new Date().toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'})}</span></div></div>`;
     }
     chatArea.insertBefore(w, typingIndicator);
     chatArea.scrollTo({ top: chatArea.scrollHeight, behavior: 'smooth' });
 }
 
+// دالة زر الواتساب الاحترافية
+function openWhatsApp() {
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=السلام%20عليكم%20دكتور%20محمد%20لبيب%20سالم%0Aأود%20الاستفسار%20عن...`, '_blank');
+}
+
+function showWelcomeMessage() {
+    const welcomeHTML = `
+        <div class="welcome-card">
+            <img src="${PROFESSOR_AVATAR}" class="welcome-image" alt="${PROFESSOR_NAME}">
+            <div class="welcome-name">${PROFESSOR_NAME}</div>
+            <div class="welcome-title">${PROFESSOR_TITLE}</div>
+            <div class="honor-badge"> ${PROFESSOR_HONOR}</div>
+            <div class="welcome-bio">
+                السلام عليكم ورحمة الله وبركاته<br>
+                أنا <strong>${PROFESSOR_NAME}</strong><br>
+                يشرفني تواصلكم معي للاستفسار عن:
+            </div>
+            <hr class="welcome-divider">
+            <div class="welcome-bio" style="font-size:12px; text-align:right; padding-right:10px;">
+                🔬 <strong>علم المناعة</strong> - أساسيات وتطبيقات<br>
+                🧬 <strong>أبحاث السرطان</strong> - أحدث الاكتشافات<br>
+                💊 <strong>العلاجات المناعية</strong> - آليات وتطورات<br>
+                📚 <strong>الاستشارات الأكاديمية</strong> - للباحثين والطلاب
+            </div>
+            <button class="whatsapp-professional" onclick="openWhatsApp()">
+                <span class="btn-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke="white">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                    </svg>
+                </span>
+                <span class="btn-text">تواصل معي واتساب</span>
+            </button>
+        </div>
+    `;
+    appendMessage(welcomeHTML, false);
+}
+
 async function processChat() {
-    const msg = userInput.value.trim(); if (!msg) return;
-    appendMessage(msg, true); userInput.value = '';
+    const msg = userInput.value.trim();
+    if (!msg) return;
+    
+    // التحقق من اللغة - منع الحروف غير العربية والإنجليزية
+    if (!isValidLanguage(msg)) {
+        appendMessage("⚠️ عذراً، يُسمح فقط باللغة العربية والإنجليزية. يرجى كتابة سؤالك بهاتين اللغتين فقط.", false);
+        userInput.value = '';
+        userInput.focus();
+        return;
+    }
+    
+    appendMessage(msg, true);
+    userInput.value = '';
     conversationHistory.push({role:"user",content:msg});
-    sendButton.disabled = true; typingIndicator.style.display = 'flex';
+    sendButton.disabled = true;
+    typingIndicator.style.display = 'flex';
     try {
-        const res = await fetch(API_URL,{method:"POST",headers:{"Authorization":`Bearer ${API_KEY}`,"Content-Type":"application/json"},body:JSON.stringify({model:"llama-3.3-70b-versatile",messages:conversationHistory,temperature:0.5,max_tokens:2000})});
+        const res = await fetch(API_URL,{
+            method:"POST",
+            headers:{"Authorization":`Bearer ${API_KEY}`,"Content-Type":"application/json"},
+            body:JSON.stringify({model:"llama-3.3-70b-versatile",messages:conversationHistory,temperature:0.5,max_tokens:2000})
+        });
         const reply = (await res.json()).choices[0].message.content;
         conversationHistory.push({role:"assistant",content:reply});
-        typingIndicator.style.display = 'none'; appendMessage(reply,false);
-    } catch(e) { typingIndicator.style.display = 'none'; appendMessage("خطأ",false); }
-    finally { sendButton.disabled = false; userInput.focus(); }
+        typingIndicator.style.display = 'none';
+        appendMessage(reply,false);
+    } catch(e) {
+        typingIndicator.style.display = 'none';
+        appendMessage("⚠️ عذراً، حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.", false);
+    } finally {
+        sendButton.disabled = false;
+        userInput.focus();
+    }
 }
 
 function handleTool(t) {
-    const q = { analyze:'حلل المناعة.', cells:'اشرح الخلايا.', diseases:'أمراض المناعة.', therapy:'علاجات الأورام.', textbooks:'كتب المناعة.', conference:'مؤتمر EACR.' };
+    const q = { analyze:'ما هي أساسيات علم المناعة؟', cells:'اشرح أنواع خلايا المناعة.', diseases:'ما هي أمراض المناعة الذاتية؟', therapy:'ما هي العلاجات المناعية للسرطان؟', textbooks:'ما هي أفضل الكتب في المناعة؟', conference:'ما هي أحدث أبحاث السرطان؟' };
     userInput.value = q[t]||''; userInput.focus();
 }
 
 function toggleDropdown() { dropdownMenu.classList.toggle('show'); }
+
 async function newChat() {
     dropdownMenu.classList.remove('show');
     chatArea.querySelectorAll('.msg-ai, .msg-user').forEach(e=>e.remove());
     conversationHistory = [{role:"system",content:getSystemPrompt(currentLanguage)}]; messageCount = 0;
-    appendMessage('مرحباً! أنا EACR.',false);
+    showWelcomeMessage();
 }
 
 async function showSessions() {
@@ -966,7 +1170,7 @@ async function init() {
     const s = window.AUTH_SYSTEM.restoreSession();
     if (s) updateUI(s);
     await loadSessions();
-    appendMessage('مرحباً! أنا EACR. اسألني عن المناعة.',false);
+    showWelcomeMessage();
     userInput.focus();
 }
 
