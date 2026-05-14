@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>EACR | مساعد أبحاث المناعة الذكي</title>
+    <title>EACR | AI</title>
     <link rel="icon" type="image/png" href="https://i.ibb.co/HDMXSBBT/logo-1.png">
     
     <meta name="description" content="EACR - مساعد أبحاث المناعة الذكي. نظام AI متطور للباحثين. طور بواسطة ELGOHARYX.">
@@ -141,7 +141,6 @@
         .dropdown-item.danger:hover { background: #fef2f2; }
         .dropdown-divider { height: 1px; background: var(--border-subtle); margin: 4px 0; }
 
-        /* Auth Modal */
         .auth-overlay {
             position: fixed; inset: 0;
             background: rgba(0,0,0,0.4);
@@ -175,7 +174,6 @@
         .auth-title { text-align: center; font-size: 20px; font-weight: 800; margin-bottom: 4px; }
         .auth-subtitle { text-align: center; font-size: var(--font-sm); color: var(--text-muted); margin-bottom: 20px; }
 
-        /* Google Sign-In Button */
         .google-btn-container { display: flex; justify-content: center; margin-bottom: 18px; }
         .google-signin-btn {
             display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -237,10 +235,8 @@
         .auth-error { font-size: var(--font-xs); color: var(--accent-danger); text-align: center; display: none; }
         .auth-error.show { display: block; }
 
-        /* Google One Tap container */
         #g_id_onload { position: fixed; top: 0; right: 0; z-index: 400; }
 
-        /* Toolbar */
         .floating-toolbar {
             position: fixed; bottom: 70px; left: 50%;
             transform: translateX(-50%); z-index: 98;
@@ -278,7 +274,6 @@
             .tool-label { display: none; }
         }
 
-        /* Chat Area */
         .chat-area {
             flex: 1;
             padding: max(70px, calc(env(safe-area-inset-top) + 70px)) 8px 130px 8px;
@@ -340,9 +335,8 @@
 </head>
 <body>
 
-<!-- Google One Tap -->
 <div id="g_id_onload"
-     data-client_id="21338593045-xxxxxxxxxxxx.apps.googleusercontent.com"
+     data-client_id="1077378702730-1kmvnj5bjksca76puve8qvatoigt7ngf.apps.googleusercontent.com"
      data-context="signin"
      data-ux_mode="popup"
      data-callback="handleGoogleSignIn"
@@ -460,7 +454,6 @@
     <div id="typing"><span id="typingText">يكتب...</span><div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>
 </div>
 
-<!-- Input Bar -->
 <div class="input-bar">
     <div class="input-inner">
         <div class="input-wrapper">
@@ -473,16 +466,14 @@
     </div>
 </div>
 
-<!-- Sessions Modal -->
 <div class="modal-overlay" id="sessionsModal" onclick="closeSessions(event)">
     <div class="modal-sheet" onclick="event.stopPropagation()">
         <div class="modal-handle"></div>
-        <div class="modal-title">📝 المحادثات السابقة</div>
+        <div class="modal-title"> المحادثات السابقة</div>
         <div id="sessionsList"><div class="session-empty">لا توجد محادثات</div></div>
     </div>
 </div>
 
-<!-- Firebase -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
     import { getDatabase, ref, get, set, push, query, limitToLast } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js";
@@ -507,7 +498,6 @@
     window.EACR_DB_QUERY = query;
     window.EACR_DB_LIMIT = limitToLast;
     
-    // ==================== AUTH SYSTEM ====================
     window.AUTH_SYSTEM = {
         db: database,
         currentUser: null,
@@ -636,7 +626,6 @@
         getUserId() { return this.currentUser ? this.currentUser.userId : null; }
     };
     
-    // ==================== MEMORY SYSTEM ====================
     window.MEMORY_SYSTEM = {
         db: database, currentSessionId: null,
         
@@ -678,9 +667,7 @@
 </script>
 
 <script>
-// ==================== GOOGLE SIGN-IN (REAL) ====================
 function signInWithGoogle() {
-    // استخدام Google Identity Services الحقيقي
     if (window.google && google.accounts && google.accounts.id) {
         google.accounts.id.prompt((notification) => {
             if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
@@ -701,7 +688,6 @@ function signInWithGoogle() {
             }
         });
     } else {
-        // Fallback: استخدام Google Identity Services popup
         google.accounts.oauth2.initCodeClient({
             client_id: '21338593045-xxxxxxxxxxxx.apps.googleusercontent.com',
             scope: 'email profile',
@@ -715,8 +701,6 @@ function signInWithGoogle() {
 
 async function handleGoogleResponse(response) {
     try {
-        // في الإنتاج: أرسل response.code للخادم للتحقق
-        // للتطوير: نستخدم token endpoint مباشرة
         const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -731,14 +715,12 @@ async function handleGoogleResponse(response) {
         
         const tokens = await tokenResponse.json();
         
-        // جلب معلومات المستخدم
         const userResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
             headers: { 'Authorization': `Bearer ${tokens.access_token}` }
         });
         
         const userInfo = await userResponse.json();
         
-        // معالجة المستخدم
         const result = await window.AUTH_SYSTEM.handleGoogleUser({
             email: userInfo.email,
             name: userInfo.name,
@@ -754,15 +736,12 @@ async function handleGoogleResponse(response) {
         }
     } catch(e) {
         console.error('Google auth error:', e);
-        // Fallback للمطورين
         googleFallback();
     }
 }
 
-// Callback من Google One Tap
 window.handleGoogleSignIn = async function(response) {
     try {
-        // فك JWT
         const payload = JSON.parse(atob(response.credential.split('.')[1]));
         
         const result = await window.AUTH_SYSTEM.handleGoogleUser({
@@ -784,7 +763,6 @@ window.handleGoogleSignIn = async function(response) {
     }
 };
 
-// Fallback للتطوير
 function googleFallback() {
     const email = prompt('Google Sign-In\nأدخل بريدك الإلكتروني:', 'researcher@gmail.com');
     if (!email) return;
@@ -802,7 +780,6 @@ function googleFallback() {
     });
 }
 
-// ==================== EACR AI ====================
 const API_KEY = "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";
 const API_URL = "https://api.groq.com/openai/v1/chat/completions";
 
@@ -822,7 +799,6 @@ let messageCount = 0;
 let currentLanguage = 'ar';
 let lastScroll = 0;
 
-// ==================== AUTH UI ====================
 function toggleAuthModal() {
     if (window.AUTH_SYSTEM?.isLoggedIn()) {
         dropdownMenu.classList.toggle('show');
@@ -911,7 +887,6 @@ async function loadSessions() {
     }
 }
 
-// ==================== CHAT ====================
 chatArea.addEventListener('scroll', () => {
     const st = chatArea.scrollTop, sh = chatArea.scrollHeight, ch = chatArea.clientHeight;
     if (st > lastScroll && st > 100 && (sh - st - ch > 60)) {
