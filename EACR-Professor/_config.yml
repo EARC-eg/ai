@@ -1,0 +1,48 @@
+# GitHub Pages Configuration
+# ============================================================
+
+# Theme settings
+theme: jekyll-theme-minimal
+
+# Site settings
+title: أ.د محمد لبيب سالم - أستاذ علم المناعة
+description: المنصة الرسمية للأستاذ الدكتور محمد لبيب سالم - أستاذ علم المناعة بجامعة طنطا ورئيس الجمعية المصرية لأبحاث السرطان
+
+# Social links
+github_username: ELGOHARYX
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Exclude files from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .gitignore
+
+# Include files
+include:
+  - _headers
+  - _redirects
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+
+# Plugins
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Custom headers for security
+webrick:
+  headers:
+    X-Content-Type-Options: "nosniff"
+    X-Frame-Options: "DENY"
+    X-XSS-Protection: "1; mode=block"
