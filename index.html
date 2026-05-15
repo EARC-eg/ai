@@ -11,7 +11,6 @@
     
     <!-- Google Identity Services -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="superintelligent-prompt.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap');
@@ -764,16 +763,16 @@
         getUserPath() { const uid = this.getUserId(); return window.AUTH_SYSTEM.isLoggedIn() ? `users/${uid}/conversations` : `devices/${uid}/conversations`; },
         
         async createSession(title) {
-            const newRef = push(ref(this.db, this.getUserPath()));
-            this.currentSessionId = newRef.key;
-            await set(newRef, { title: title||'محادثة', createdAt: Date.now(), updatedAt: Date.now(), messageCount: 0 });
+            const ref = push(ref(this.db, this.getUserPath()));
+            this.currentSessionId = ref.key;
+            await set(ref, { title: title||'محادثة', createdAt: Date.now(), updatedAt: Date.now(), messageCount: 0 });
             return this.currentSessionId;
         },
         
         async saveMessage(role, content) {
             if (!this.currentSessionId) await this.createSession(content.substring(0,50));
-            const newRef = push(ref(this.db, `${this.getUserPath()}/${this.currentSessionId}/messages`));
-            await set(newRef, { role, content: content.substring(0,3000), timestamp: Date.now() });
+            const ref = push(ref(this.db, `${this.getUserPath()}/${this.currentSessionId}/messages`));
+            await set(ref, { role, content: content.substring(0,3000), timestamp: Date.now() });
         },
         
         async loadSessions() {
@@ -798,46 +797,6 @@
 </script>
 
 <script>
-// ============================================
-// دالة getSystemPrompt المعدلة لاستخدام ملف superintelligent-prompt.js
-// ============================================
-function getSystemPrompt(language) {
-    // محاولة استخدام البرومت من الملف المنفصل superintelligent-prompt.js
-    if (typeof SUPER_PROMPT !== 'undefined' && SUPER_PROMPT && typeof SUPER_PROMPT.getSystemPrompt === 'function') {
-        return SUPER_PROMPT.getSystemPrompt(language);
-    }
-    
-    // برومت احتياطي فائق الذكاء في حال لم يتم تحميل الملف
-    if (language === 'ar') {
-        return `أنت أ.د محمد لبيب سالم، أستاذ علم المناعة بجامعة طنطا ورئيس الجمعية المصرية لأبحاث السرطان.
-
-🧠 بروتوكول التفكير العميق:
-[1] تحليل السؤال من 7 زوايا: سريرية، جزيئية، إحصائية، تاريخية، أخلاقية، تطبيقية، مستقبلية
-[2] تطبيق الاستدلال المتقدم: التشخيص التفريقي، هرم الأدلة، تحليل المخاطر/الفوائد
-[3] هيكل الإجابة:
-    📌 الخلاصة المباشرة
-    🔬 التحليل المعمق
-    📚 الأدلة والمصادر
-    💡 التوصيات العملية
-    ❓ سؤال استقصائي
-
-🚫 الحدود الأخلاقية: لا تصف أدوية دون استشارة طبية، المعلومات لأغراض تعليمية.
-
-الآن، أنا جاهز للإجابة بذكاء فائق.`;
-    } else {
-        return `You are Prof. Mohamed Labib Salem, Professor of Immunology at Tanta University.
-
-DEEP THINKING PROTOCOL:
-1. Multi-dimensional analysis (clinical, molecular, statistical, historical, ethical, practical, future)
-2. Advanced reasoning (differential diagnosis, evidence pyramid, risk-benefit analysis)
-3. Response structure: Summary → Analysis → Evidence → Recommendations → Probing question
-
-Ethical boundaries: No prescriptions without medical consultation. Educational purposes only.
-
-I am ready to answer with superintelligence.`;
-    }
-}
-
 function signInWithGoogle() {
     if (window.google && google.accounts && google.accounts.id) {
         google.accounts.id.prompt((notification) => {
@@ -971,6 +930,7 @@ let messageCount = 0;
 let currentLanguage = 'ar';
 let lastScroll = 0;
 
+// دالة للتحقق من صحة النص (يسمح فقط بالعربية والإنجليزية)
 function isValidLanguage(text) {
     const allowedPattern = /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FFa-zA-Z0-9\s\.,!?;:()\-_'"@#\$%&*+=/\\|~`{}[\]<>،؛؟\u061F\u061B\u066B\u066C\u060C\s]+$/;
     return allowedPattern.test(text);
@@ -1074,6 +1034,9 @@ chatArea.addEventListener('scroll', () => {
     lastScroll = st;
 });
 
+function getSystemPrompt(l) { 
+    return l==='ar' ? `أنت "${PROFESSOR_NAME}"، ${PROFESSOR_TITLE} و${PROFESSOR_HONOR}. أنت خبير في علم المناعة وأبحاث السرطان.` : `You are "${PROFESSOR_NAME}", Professor of Immunology at Tanta University and President of the Egyptian Association for Cancer Research.`; 
+}
 function detectLanguage(t) { return (t.match(/[\u0600-\u06FF]/g)||[]).length >= (t.match(/[a-zA-Z]/g)||[]).length ? 'ar' : 'en'; }
 function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
@@ -1090,6 +1053,7 @@ function appendMessage(text, isUser) {
     chatArea.scrollTo({ top: chatArea.scrollHeight, behavior: 'smooth' });
 }
 
+// دالة زر الواتساب الاحترافية
 function openWhatsApp() {
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=السلام%20عليكم%20دكتور%20محمد%20لبيب%20سالم%0Aأود%20الاستفسار%20عن...`, '_blank');
 }
@@ -1130,6 +1094,7 @@ async function processChat() {
     const msg = userInput.value.trim();
     if (!msg) return;
     
+    // التحقق من اللغة - منع الحروف غير العربية والإنجليزية
     if (!isValidLanguage(msg)) {
         appendMessage("⚠️ عذراً، يُسمح فقط باللغة العربية والإنجليزية. يرجى كتابة سؤالك بهاتين اللغتين فقط.", false);
         userInput.value = '';
@@ -1139,44 +1104,20 @@ async function processChat() {
     
     appendMessage(msg, true);
     userInput.value = '';
-    
-    // تحديث اللغة الحالية
-    currentLanguage = detectLanguage(msg);
-    
-    // استخدام دالة getSystemPrompt المعدلة التي تستخدم ملف superintelligent-prompt.js
-    const systemPrompt = getSystemPrompt(currentLanguage);
-    
-    // بناء تاريخ المحادثة مع البرومت الجديد
-    const messagesForAPI = [{role: "system", content: systemPrompt}, ...conversationHistory.slice(1)];
-    messagesForAPI.push({role: "user", content: msg});
-    
+    conversationHistory.push({role:"user",content:msg});
     sendButton.disabled = true;
     typingIndicator.style.display = 'flex';
-    
     try {
-        const res = await fetch(API_URL, {
-            method: "POST",
-            headers: {"Authorization": `Bearer ${API_KEY}`, "Content-Type": "application/json"},
-            body: JSON.stringify({
-                model: "llama-3.3-70b-versatile",
-                messages: messagesForAPI,
-                temperature: 0.6,
-                max_tokens: 2500
-            })
+        const res = await fetch(API_URL,{
+            method:"POST",
+            headers:{"Authorization":`Bearer ${API_KEY}`,"Content-Type":"application/json"},
+            body:JSON.stringify({model:"llama-3.3-70b-versatile",messages:conversationHistory,temperature:0.5,max_tokens:2000})
         });
-        const data = await res.json();
-        const reply = data.choices[0].message.content;
-        conversationHistory.push({role: "user", content: msg});
-        conversationHistory.push({role: "assistant", content: reply});
+        const reply = (await res.json()).choices[0].message.content;
+        conversationHistory.push({role:"assistant",content:reply});
         typingIndicator.style.display = 'none';
-        appendMessage(reply, false);
-        
-        if (window.MEMORY_SYSTEM && window.MEMORY_SYSTEM.currentSessionId) {
-            await window.MEMORY_SYSTEM.saveMessage('user', msg);
-            await window.MEMORY_SYSTEM.saveMessage('assistant', reply);
-        }
+        appendMessage(reply,false);
     } catch(e) {
-        console.error('API Error:', e);
         typingIndicator.style.display = 'none';
         appendMessage("⚠️ عذراً، حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.", false);
     } finally {
@@ -1195,8 +1136,7 @@ function toggleDropdown() { dropdownMenu.classList.toggle('show'); }
 async function newChat() {
     dropdownMenu.classList.remove('show');
     chatArea.querySelectorAll('.msg-ai, .msg-user').forEach(e=>e.remove());
-    conversationHistory = [];
-    messageCount = 0;
+    conversationHistory = [{role:"system",content:getSystemPrompt(currentLanguage)}]; messageCount = 0;
     showWelcomeMessage();
 }
 
@@ -1213,8 +1153,7 @@ async function loadSession(id) {
     chatArea.querySelectorAll('.msg-ai, .msg-user').forEach(e=>e.remove());
     const msgs = await window.MEMORY_SYSTEM.loadSessionMessages(id);
     window.MEMORY_SYSTEM.currentSessionId = id;
-    conversationHistory = [];
-    messageCount = 0;
+    conversationHistory = [{role:"system",content:getSystemPrompt(currentLanguage)}]; messageCount = 0;
     msgs.forEach(m=>{appendMessage(m.content,m.role==='user');conversationHistory.push({role:m.role,content:m.content});});
 }
 
@@ -1222,7 +1161,7 @@ function closeSessions(e) { if(e.target===sessionsModal) sessionsModal.classList
 document.addEventListener('click',(e)=>{if(!e.target.closest('.pen-btn-wrapper')&&!e.target.closest('.header-actions')) dropdownMenu.classList.remove('show');});
 
 async function init() {
-    conversationHistory = [];
+    conversationHistory = [{role:"system",content:getSystemPrompt('ar')}];
     const s = window.AUTH_SYSTEM.restoreSession();
     if (s) updateUI(s);
     await loadSessions();
@@ -1235,5 +1174,6 @@ sendButton.addEventListener('click',processChat);
 userInput.addEventListener('keypress',(e)=>{if(e.key==='Enter'){e.preventDefault();processChat();}});
 setTimeout(()=>{if(!window.EACR_DB) init();},2500);
 </script>
+
 </body>
 </html>
